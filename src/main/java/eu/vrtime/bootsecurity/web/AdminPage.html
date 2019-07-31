@@ -11,27 +11,30 @@
 </head>
 
 <body>
-	<div class="container-fluid">
-
-		<div wicket:id="label1"></div>
-		<div id="user" class="well">
-			<label>UserName: </label><span wicket:id="userName"></span>
-			<label>UserMail: </label><span wicket:id="userMail" ></span>
-			<label>DN: </label><span wicket:id="dn"></span>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 pull-left">
+				<div wicket:id="label1"></div>
+				<div class="col-md-8">
+					<label>UserName:</label><span wicket:id="userName"></span> <label>UserMail:</label><span
+						wicket:id="userMail"></span> <label>DN:</label><span
+						wicket:id="dn"></span>
+				</div>
+			</div>
+			<div class="col-md-6 pull-right">
+				<a href="#" wicket:id="signOut">Sign Out</a>
+			</div>
 		</div>
 		<div>
-		<form wicket:id="form" >
+			<form wicket:id="form">
 
-			<label>textBox</label><br />
-			<textArea wicket:id="textBox" type="text" class="input-medium" />
-
-			<div>
-
-				<input wicket:id="btn" class="btn btn-default" type="submit"
-					value="click" />
-			</div>
-
-		</form>
+				<label>textBox</label><br />
+				<textArea wicket:id="textBox" type="text" class="input-medium" />
+				<div>
+					<input wicket:id="btn" class="btn btn-default" type="submit"
+						value="click" />
+				</div>
+			</form>
 		</div>
 		<div wicket:id="feedback"></div>
 	</div>

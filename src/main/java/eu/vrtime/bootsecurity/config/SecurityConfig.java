@@ -5,6 +5,7 @@ import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -21,6 +22,8 @@ import org.springframework.security.ldap.userdetails.LdapAuthoritiesPopulator;
 import org.springframework.security.ldap.userdetails.UserDetailsContextMapper;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import eu.vrtime.bootsecurity.auth.CustomUserDetailsContextMapper;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -49,27 +52,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Value("${ldap.user.password}")
 	private String ldapUserPassword;
 
+	@Bean(name = "authenticationManager")
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
+
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.ldapAuthentication().userDnPatterns(ldapUserDn)
-		.contextSource(contextSource())
-		.userDetailsContextMapper(userDetailsContextMapper())
-		.userSearchBase(ldapUserSearchBase)
-		.userSearchFilter(ldapUserSearchFilter)
-		.groupSearchBase(ldapGroupSearchBase)
-		.groupSearchFilter(ldapGroupSearchFilter)
-		.passwordCompare()
-		.passwordEncoder(new LdapShaPasswordEncoder())
-		.passwordAttribute(ldapUserPassword);
+		auth.ldapAuthentication().userDnPatterns(ldapUserDn).contextSource(contextSource())
+				.userDetailsContextMapper(userDetailsContextMapper()).userSearchBase(ldapUserSearchBase)
+				.userSearchFilter(ldapUserSearchFilter).groupSearchBase(ldapGroupSearchBase)
+				.groupSearchFilter(ldapGroupSearchFilter).passwordCompare()
+				.passwordEncoder(new LdapShaPasswordEncoder()).passwordAttribute(ldapUserPassword);
 
 	}
-	
-
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().anyRequest().fullyAuthenticated().and().formLogin();
-		
+
 		// Ajax is not working without this. Need to figure out why.
 		http.csrf().disable();
 	}
@@ -78,11 +79,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public DefaultSpringSecurityContextSource contextSource() {
 		return new DefaultSpringSecurityContextSource(Collections.singletonList(ldapUrl), ldapBaseDn);
 	}
-	
+
 	@Bean
 	public UserDetailsContextMapper userDetailsContextMapper() {
 		return new CustomUserDetailsContextMapper();
 	}
-
 
 }
