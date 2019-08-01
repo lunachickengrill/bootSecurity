@@ -5,6 +5,8 @@ import org.apache.commons.lang3.text.StrBuilder;
 import org.apache.wicket.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -43,14 +45,22 @@ public class AdminPage extends WebPage {
 	private String message;
 
 	private CustomUserDetails userDetails;
-	
+
 	@SpringBean
 	private AuthenticationManager manager;
 
 	public AdminPage() {
-
 		textBox = new TextArea<>(TEXTAREA_ID, new PropertyModel<>(this, "text"));
+	}
 
+	@Override
+	protected void onConfigure() {
+		super.onConfigure();
+
+		AuthenticatedWebApplication app = (AuthenticatedWebApplication) Application.get();
+		if (!AuthenticatedWebSession.get().isSignedIn()) {
+			app.restartResponseAtSignInPage();
+		}
 	}
 
 	@Override
@@ -68,7 +78,6 @@ public class AdminPage extends WebPage {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
-				// TODO Auto-generated method stub
 				super.onSubmit(target);
 
 				if (textBox.getModelObject() == null) {
@@ -92,7 +101,7 @@ public class AdminPage extends WebPage {
 		add(new Label(USERNAME_ID, userDetails.getUsername()));
 		add(new Label(USERMAIL_ID, userDetails.getMail()));
 		add(new Label("dn", userDetails.getDn().toString()));
-		
+
 		add(createLogoutLink(SIGNOUT_ID));
 
 	}

@@ -12,31 +12,43 @@
 
 <body>
 	<div class="container">
-		<div class="row">
-			<div class="col-md-6 pull-left">
+		<div class="container">
+			<div class="row">
 				<div wicket:id="label1"></div>
-				<div class="col-md-8">
+				<div class="col-md-12 pull-left">
+
 					<label>UserName:</label><span wicket:id="userName"></span> <label>UserMail:</label><span
 						wicket:id="userMail"></span> <label>DN:</label><span
 						wicket:id="dn"></span>
-				</div>
-			</div>
-			<div class="col-md-6 pull-right">
-				<a href="#" wicket:id="signOut">Sign Out</a>
-			</div>
-		</div>
-		<div>
-			<form wicket:id="form">
 
-				<label>textBox</label><br />
-				<textArea wicket:id="textBox" type="text" class="input-medium" />
-				<div>
-					<input wicket:id="btn" class="btn btn-default" type="submit"
-						value="click" />
 				</div>
-			</form>
+				<div class="col-md-2 pull-right">
+					<a href="#" wicket:id="signOut">Sign Out</a>
+				</div>
+			</div>
 		</div>
-		<div wicket:id="feedback"></div>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-10">
+					<form wicket:id="form">
+						<div class="form-group">
+							<label for="textArea" class="form-control-label">textBox</label>
+							<textArea wicket:id="textBox" type="text" class="form-control"
+								id="textArea" />
+						</div>
+
+
+						<input wicket:id="btn" class="btn btn-default" type="submit"
+							value="click" />
+
+					</form>
+
+				</div>
+			</div class="row">
+			<div class="col-lg-10">
+				<div wicket:id="feedback"></div>
+			</div>
+		</div>
 	</div>
 </body>
 </html>
