@@ -1,28 +1,25 @@
 package eu.vrtime.bootsecurity.web;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.text.StrBuilder;
 import org.apache.wicket.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
+import org.apache.wicket.extensions.markup.html.tabs.ITab;
+import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.WebSession;
@@ -30,7 +27,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.ldap.userdetails.LdapAuthority;
 
 import eu.vrtime.bootsecurity.auth.CustomUserDetails;
 import eu.vrtime.bootsecurity.web.auth.SecureAuthenticatedWebSession;
@@ -57,6 +53,8 @@ public class AdminPage extends WebPage {
 	private CustomUserDetails userDetails;
 	private Collection<? extends GrantedAuthority> authorities;
 	private SecureAuthenticatedWebSession session = (SecureAuthenticatedWebSession) AuthenticatedWebSession.get();
+
+	private List<ITab> tabs = new ArrayList<>();
 
 	@SpringBean
 	private AuthenticationManager manager;
@@ -125,6 +123,9 @@ public class AdminPage extends WebPage {
 
 		add(createLogoutLink(SIGNOUT_ID));
 
+		final TabbedPanel<ITab> tabbedPanel = new TabbedPanel<ITab>("tabs", tabs);
+		add(tabbedPanel);
+
 	}
 
 	private Link<Void> createLogoutLink(final String id) {
@@ -144,6 +145,32 @@ public class AdminPage extends WebPage {
 		};
 
 		return link;
+	}
+
+	private void createTabs() {
+		tabs.add(new AbstractTab(new Model<String>("first tab")) {
+
+			@Override
+			public WebMarkupContainer getPanel(String panelId) {
+				return new TabPanelOne(panelId);
+			}
+		});
+
+		tabs.add(new AbstractTab(new Model<String>("second tab")) {
+
+			@Override
+			public WebMarkupContainer getPanel(String panelId) {
+				return new TabPanelTwo(panelId);
+			}
+		});
+
+		tabs.add(new AbstractTab(new Model<String>("third tab")) {
+
+			@Override
+			public WebMarkupContainer getPanel(String panelId) {
+				return new TabPanelThree(panelId);
+			}
+		});
 	}
 
 }
