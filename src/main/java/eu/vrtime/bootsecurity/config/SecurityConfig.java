@@ -66,15 +66,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return super.authenticationManagerBean();
 	}
 
+//	@Override
+//	public void configure(AuthenticationManagerBuilder auth) throws Exception {
+//		auth.ldapAuthentication().userDnPatterns(ldapUserDn).contextSource(contextSource())
+//				.userDetailsContextMapper(userDetailsContextMapper()).userSearchBase(ldapUserSearchBase)
+//				.userSearchFilter(ldapUserSearchFilter).groupSearchBase(ldapGroupSearchBase)
+//				.groupSearchFilter(ldapGroupSearchFilter).passwordCompare()
+//				.passwordEncoder(new LdapShaPasswordEncoder()) // Need to check what encoder to use
+//				.passwordAttribute(ldapUserPassword);
+//
+//	}
+	
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.ldapAuthentication().userDnPatterns(ldapUserDn).contextSource(contextSource())
-				.userDetailsContextMapper(userDetailsContextMapper()).userSearchBase(ldapUserSearchBase)
-				.userSearchFilter(ldapUserSearchFilter).groupSearchBase(ldapGroupSearchBase)
-				.groupSearchFilter(ldapGroupSearchFilter).passwordCompare()
-				.passwordEncoder(new LdapShaPasswordEncoder()) // Need to check what encoder to use
-				.passwordAttribute(ldapUserPassword);
-
+		
+		auth
+			.ldapAuthentication()
+			.contextSource(contextSource())
+			.userDetailsContextMapper(userDetailsContextMapper())
+			.userDnPatterns(ldapUserDn)
+			.groupSearchFilter(ldapGroupSearchFilter)
+			.ldapAuthoritiesPopulator(ldapAuthoritiesPopulator());
+		
 	}
 
 	@Override
@@ -101,19 +114,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return new DefaultSpringSecurityContextSource(Collections.singletonList(ldapUrl), ldapBaseDn);
 	}
 
-//	// The BindAuthenticator
-//	@Bean
-//	public LdapAuthenticationProvider ldapAuthProvider() {
-//		BindAuthenticator authenticator = new BindAuthenticator(contextSource());
-//		authenticator.setUserDnPatterns(new String[] { ldapUserDn });
-//		return new LdapAuthenticationProvider(authenticator);
-//	}
-//
 	
 	// The LdapAuthoritiesPopulator to get the group
 	@Bean
 	public DefaultLdapAuthoritiesPopulator ldapAuthoritiesPopulator() {
-		return new DefaultLdapAuthoritiesPopulator(contextSource(), ldapGroupSearchBase);
+		
+		DefaultLdapAuthoritiesPopulator authoritiesPopulator = new DefaultLdapAuthoritiesPopulator(contextSource(), ldapGroupSearchBase);
+		authoritiesPopulator.setGroupSearchFilter(ldapGroupSearchFilter);
+		authoritiesPopulator.setSearchSubtree(true);
+		authoritiesPopulator.setGroupRoleAttribute("cn");
+		return authoritiesPopulator;
+
 	}
 
 	@Bean

@@ -1,5 +1,7 @@
 package eu.vrtime.bootsecurity.web.auth;
 
+import java.util.Collection;
+
 import javax.inject.Inject;
 
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
@@ -14,9 +16,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.ldap.userdetails.LdapUserDetails;
 import org.springframework.util.Assert;
 
+import eu.vrtime.bootsecurity.auth.CustomRoles;
 import eu.vrtime.bootsecurity.auth.CustomUserDetails;
 
 public class SecureAuthenticatedWebSession extends AuthenticatedWebSession {
@@ -26,6 +31,7 @@ public class SecureAuthenticatedWebSession extends AuthenticatedWebSession {
 	private static final long serialVersionUID = -5174537839833660312L;
 
 	private CustomUserDetails user;
+	private Collection<? extends GrantedAuthority> authorities;
 
 	@Inject
 	@Qualifier("authenticationManager")
@@ -45,11 +51,6 @@ public class SecureAuthenticatedWebSession extends AuthenticatedWebSession {
 
 	}
 
-	@Override
-	public Roles getRoles() {
-		throw new UnsupportedOperationException("Not implemented");
-	}
-
 	private boolean auth(String username, String password) {
 		boolean isAuth = false;
 
@@ -65,6 +66,33 @@ public class SecureAuthenticatedWebSession extends AuthenticatedWebSession {
 		}
 
 		return isAuth;
+
+	}
+
+	@Override
+	public Roles getRoles() {
+
+		CustomRoles roles = new CustomRoles();
+		getRolesIfSignedIdn(roles);
+
+//		throw new UnsupportedOperationException("Not implemented");
+		return roles;
+	}
+
+	private void getRolesIfSignedIdn(CustomRoles roles) {
+		if (isSignedIn()) {
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			addRolesFromAuthentication(roles, authentication);
+		}
+	}
+
+	private void addRolesFromAuthentication(CustomRoles roles, Authentication authentication) {
+		for (GrantedAuthority authority : authentication.getAuthorities()) {
+			roles.add(authority.getAuthority());
+			if (authority.getAuthority().contains("APPADMIN")) {
+				roles.add(Roles.ADMIN);
+			}
+		}
 
 	}
 

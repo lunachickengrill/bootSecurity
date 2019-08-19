@@ -70,3 +70,19 @@ cn: managers
 ou: manager
 uniqueMember: uid=ben,ou=people,dc=springframework,dc=org
 uniqueMember: uid=koarl,ou=people,dc=springframework,dc=org
+
+dn: cn=engineers,ou=groups,dc=springframework,dc=org
+objectclass: top
+objectclass: groupOfUniqueNames
+cn: engineers
+ou: engineer
+uniqueMember: uid=ben,ou=people,dc=springframework,dc=org
+uniqueMember: uid=tom,ou=people,dc=springframework,dc=org
+
+dn: cn=appadmin,ou=groups,dc=springframework,dc=org
+objectclass: top
+objectclass: groupOfUniqueNames
+cn: appadmins
+ou: appadmin
+uniqueMember: uid=ben,ou=people,dc=springframework,dc=org
+uniqueMember: uid=tom,ou=people,dc=springframework,dc=org

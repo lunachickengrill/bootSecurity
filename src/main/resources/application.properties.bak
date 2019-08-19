@@ -5,7 +5,7 @@ spring.ldap.embedded.port=8389
 ldap.url=ldap://localhost:8389
 ldap.basedn=dc=springframework,dc=org
 ldap.user.dn=uid={0},ou=people
-ldap.user.searchbase="ou=people
+ldap.user.searchbase=ou=people
 ldap.user.searchfilter=uid={0}
 ldap.group.searchbase=ou=groups
 ldap.group.searchfilter=uniqueMember={0}

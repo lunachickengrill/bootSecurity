@@ -21,13 +21,10 @@ public class CustomUserDetailsContextMapper extends LdapUserDetailsMapper implem
 	public LdapUserDetails mapUserFromContext(DirContextOperations ctx, String username,
 			Collection<? extends GrantedAuthority> authorities) {
 
-		
 		String mail = ctx.getAttributes().get("mail") != null ? ctx.getStringAttribute("mail") : "NA";
 		UserDetails userDetails = super.mapUserFromContext(ctx, username, authorities);
 
-		CustomUserDetails customUserDetails = new CustomUserDetails((LdapUserDetails) userDetails, mail);
-
-		return customUserDetails;
+		return new CustomUserDetails((LdapUserDetails) userDetails, mail);
 	}
 
 	@Override

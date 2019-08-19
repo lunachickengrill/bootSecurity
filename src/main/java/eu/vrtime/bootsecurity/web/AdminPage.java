@@ -1,5 +1,8 @@
 package eu.vrtime.bootsecurity.web;
 
+import java.util.Collection;
+import java.util.List;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.text.StrBuilder;
 import org.apache.wicket.Application;
@@ -7,6 +10,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeAction;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -15,6 +20,7 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -22,9 +28,12 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.ldap.userdetails.LdapAuthority;
 
 import eu.vrtime.bootsecurity.auth.CustomUserDetails;
+import eu.vrtime.bootsecurity.web.auth.SecureAuthenticatedWebSession;
 
 public class AdminPage extends WebPage {
 
@@ -33,6 +42,7 @@ public class AdminPage extends WebPage {
 	private static final String FORM_ID = "form";
 	private static final String BUTTON_ID = "btn";
 	private static final String FEEDBACK_ID = "feedback";
+	private static final String DN_ID = "dn";
 	private static final String USERNAME_ID = "userName";
 	private static final String USERMAIL_ID = "userMail";
 	private static final String SIGNOUT_ID = "signOut";
@@ -45,6 +55,8 @@ public class AdminPage extends WebPage {
 	private String message;
 
 	private CustomUserDetails userDetails;
+	private Collection<? extends GrantedAuthority> authorities;
+	private SecureAuthenticatedWebSession session = (SecureAuthenticatedWebSession) AuthenticatedWebSession.get();
 
 	@SpringBean
 	private AuthenticationManager manager;
@@ -98,9 +110,18 @@ public class AdminPage extends WebPage {
 		add(form);
 
 		userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		authorities = userDetails.getAuthorities();
+
+		RepeatingView rolesView = new RepeatingView("rolesView");
+		authorities
+				.forEach(role -> rolesView.add(new Label(rolesView.newChildId(), role.getAuthority().toUpperCase())));
+
+		add(rolesView);
 		add(new Label(USERNAME_ID, userDetails.getUsername()));
 		add(new Label(USERMAIL_ID, userDetails.getMail()));
-		add(new Label("dn", userDetails.getDn().toString()));
+		add(new Label(DN_ID, userDetails.getDn().toString()));
+		add(new Label("isAdmin", session.getRoles().hasRole("ADMIN")));
+		add(new Label("wicketRoles", session.getRoles()));
 
 		add(createLogoutLink(SIGNOUT_ID));
 

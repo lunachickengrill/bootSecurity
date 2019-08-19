@@ -16,7 +16,7 @@ public class WicketApplication extends AuthenticatedWebApplication {
 
 	@Override
 	protected void init() {
-		super.init();
+
 		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 		mountPage("/admin", AdminPage.class);
 		mountPage("/login", LoginPage.class);

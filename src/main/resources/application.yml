@@ -1,0 +1,18 @@
+spring:
+ ldap:
+  embedded:
+   ldif: classpath:users.ldif
+   base-dn: dc=springframework,dc=org
+   port: 8389
+
+ldap:
+ url: ldap://localhost:8389
+ basedn: dc=springframework,dc=org
+ user:
+  dn: uid={0},ou=people
+  searchbase: ou=people
+  searchfilter: uid={0}
+  password: userPassword
+ group:
+  searchbase: ou=groups
+  searchfilter: uniqueMember={0}
