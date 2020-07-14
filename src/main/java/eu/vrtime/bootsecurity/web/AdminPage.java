@@ -33,6 +33,10 @@ import eu.vrtime.bootsecurity.web.auth.SecureAuthenticatedWebSession;
 
 public class AdminPage extends WebPage {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static final String LABEL1_ID = "label1";
 	private static final String TEXTAREA_ID = "textBox";
 	private static final String FORM_ID = "form";
@@ -150,6 +154,11 @@ public class AdminPage extends WebPage {
 	private void createTabs() {
 		tabs.add(new AbstractTab(new Model<String>("first tab")) {
 
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public WebMarkupContainer getPanel(String panelId) {
 				return new TabPanelOne(panelId);
@@ -158,6 +167,11 @@ public class AdminPage extends WebPage {
 
 		tabs.add(new AbstractTab(new Model<String>("second tab")) {
 
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public WebMarkupContainer getPanel(String panelId) {
 				return new TabPanelTwo(panelId);
@@ -165,6 +179,11 @@ public class AdminPage extends WebPage {
 		});
 
 		tabs.add(new AbstractTab(new Model<String>("third tab")) {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public WebMarkupContainer getPanel(String panelId) {

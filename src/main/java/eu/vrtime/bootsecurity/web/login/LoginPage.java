@@ -1,6 +1,5 @@
 package eu.vrtime.bootsecurity.web.login;
 
-import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.WebPage;
@@ -10,12 +9,16 @@ import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 
-import eu.vrtime.bootsecurity.WicketApplication;
 import eu.vrtime.bootsecurity.web.AdminPage;
 import eu.vrtime.bootsecurity.web.auth.SecureAuthenticatedWebSession;
 
 public class LoginPage extends WebPage {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private static final String LOGINFORM_ID = "loginForm";
 	private static final String USERNAME_ID = "username";
 	private static final String PASSWORD_ID = "password";

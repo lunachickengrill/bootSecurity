@@ -1,18 +1,27 @@
 spring:
  ldap:
   embedded:
-   ldif: classpath:users.ldif
-   base-dn: dc=springframework,dc=org
+   ldif: classpath:uimusers.ldif
+   # base-dn: dc=springframework,dc=org
+   base-dn: dc=upc,dc=biz
    port: 8389
 
 ldap:
  url: ldap://localhost:8389
- basedn: dc=springframework,dc=org
+ # basedn: dc=springframework,dc=org
+ basedn: dc=upc,dc=biz
  user:
   dn: uid={0},ou=people
   searchbase: ou=people
   searchfilter: uid={0}
   password: userPassword
+  # password: password
  group:
-  searchbase: ou=groups
-  searchfilter: uniqueMember={0}
+  # searchbase: ou=groups
+  # searchfilter: uniqueMember={0}
+  searchbase: ou=tmngx-app-roles,ou=svcs
+  searchfilter: member={0}
+  
+server:
+  servlet:
+    context-path: /bootsecurity  

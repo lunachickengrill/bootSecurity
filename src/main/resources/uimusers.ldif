@@ -1,0 +1,63 @@
+dn: dc=upc,dc=biz
+objectclass: top
+objectclass: domain
+objectclass: extensibleObject
+dc: upc
+
+dn: ou=people,dc=upc,dc=biz
+ou: people
+objectClass: top
+objectClass: organizationalUnit
+
+dn: ou=svcs,dc=upc,dc=biz
+ou: svcs
+objectClass: top
+objectClass: organizationalUnit
+
+dn: ou=tmngx-app-roles,ou=svcs,dc=upc,dc=biz
+objectClass: top
+objectClass: organizationalUnit
+ou: tmngx-app-roles
+destinationIndicator: 2
+description: TMNGx App Roles
+
+
+
+dn: uid=admin,ou=people,dc=upc,dc=biz
+cn: admin
+sn: admin
+givenName: admin
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetorgPerson
+uid: admin
+userPassword: lgs123
+
+dn: uid=subadmin,ou=people,dc=upc,dc=biz
+cn: subadmin
+sn: subadmin
+givenName: subadmin
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetorgPerson
+uid: subadmin
+userPassword: lgs123
+
+
+
+dn: cn=APP_TMNGx-support,ou=tmngx-app-roles,ou=svcs,dc=upc,dc=biz
+member: uid=admin,ou=people,dc=upc,dc=biz
+member: uid=subadmin,ou=people,dc=upc,dc=biz
+description: APP-TMNGx-support
+objectClass: top
+objectClass: groupOfNames
+cn: APP_TMNGx-support
+
+dn: cn=APP_TMNGx-admin,ou=tmngx-app-roles,ou=svcs,dc=upc,dc=biz
+member: uid=admin,ou=people,dc=upc,dc=biz
+description: APP-TMNGx-admin
+objectClass: top
+objectClass: groupOfNames
+cn: APP_TMNGx-admin

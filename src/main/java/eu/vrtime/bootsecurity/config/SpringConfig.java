@@ -1,7 +1,6 @@
 package eu.vrtime.bootsecurity.config;
 
 import javax.servlet.DispatcherType;
-import javax.servlet.Filter;
 
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.protocol.http.WicketFilter;

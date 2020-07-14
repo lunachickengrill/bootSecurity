@@ -51,7 +51,7 @@ objectclass: organizationalPerson
 objectclass: inetOrgPerson
 cn: Tom Turbo
 sn: Turbo
-mail: dablada@test.at
+mail: dablade@test.at
 uid: tom
 userPassword: password
 
