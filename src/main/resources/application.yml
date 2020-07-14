@@ -7,8 +7,10 @@ spring:
    port: 8389
 
 ldap:
- url: ldap://localhost:8389
+ #url: ldap://localhost:8389
+ # ldap-urls: ldaps://viepuimat40, ldaps://sr1puimnl10
  # basedn: dc=springframework,dc=org
+ url: ldap://viepuimat40:389
  basedn: dc=upc,dc=biz
  user:
   dn: uid={0},ou=people

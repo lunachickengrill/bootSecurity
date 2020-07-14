@@ -93,11 +93,9 @@ public class SecureAuthenticatedWebSession extends AuthenticatedWebSession {
 			roles.add(authority.getAuthority());
 			if (authority.getAuthority().contains(SUPPORT_ROLE)) {
 				roles.add(CustomRoles.USER_BASIC);
-				roles.remove(SUPPORT_ROLE);
 			}
 			if (authority.getAuthority().contains(ADMIN_ROLE)) {
 				roles.add(CustomRoles.USER_ADVANCED);
-				roles.remove(ADMIN_ROLE);
 			}
 		}
 
