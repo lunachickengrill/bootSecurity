@@ -46,7 +46,7 @@ public class AdminPage extends WebPage {
 	private static final String USERNAME_ID = "userName";
 	private static final String USERMAIL_ID = "userMail";
 	private static final String SIGNOUT_ID = "signOut";
-
+	
 	private Label label1 = new Label(LABEL1_ID, "Spring Security LDAP");
 	private TextArea textBox;
 	private Form form = new Form<Void>(FORM_ID);

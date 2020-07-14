@@ -29,7 +29,9 @@ public class SecureAuthenticatedWebSession extends AuthenticatedWebSession {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private static final long serialVersionUID = -5174537839833660312L;
-
+	private static final String ADMIN_ROLE = "ROLE_APP_TMNGX-ADMIN";
+	private static final String SUPPORT_ROLE = "ROLE_APP_TMNGX-SUPPORT";
+	
 	private CustomUserDetails user;
 	private Collection<? extends GrantedAuthority> authorities;
 
@@ -89,8 +91,13 @@ public class SecureAuthenticatedWebSession extends AuthenticatedWebSession {
 	private void addRolesFromAuthentication(CustomRoles roles, Authentication authentication) {
 		for (GrantedAuthority authority : authentication.getAuthorities()) {
 			roles.add(authority.getAuthority());
-			if (authority.getAuthority().contains("APPADMIN")) {
-				roles.add(Roles.ADMIN);
+			if (authority.getAuthority().contains(SUPPORT_ROLE)) {
+				roles.add(CustomRoles.USER_BASIC);
+				roles.remove(SUPPORT_ROLE);
+			}
+			if (authority.getAuthority().contains(ADMIN_ROLE)) {
+				roles.add(CustomRoles.USER_ADVANCED);
+				roles.remove(ADMIN_ROLE);
 			}
 		}
 
